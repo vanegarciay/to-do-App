@@ -1,0 +1,28 @@
+body {
+    background-color: #FFFFFF;
+    font-family: 'Fresca', sans-serif;
+}
+
+header {
+    background-color: #9CCD7C;
+}
+
+button {
+    background-color: #9CCD7C;
+    border: none;
+    border-radius: 100%;
+    padding: 7px;
+    margin: 10px;
+    color: white;
+    align-items: center;
+
+}
+
+h2 {
+    color: #9CCD7C;
+}
+
+#tarea {
+    width: 70%;
+        border-bottom: 2px solid #9CCD7C;
+}

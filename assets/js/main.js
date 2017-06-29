@@ -18,9 +18,10 @@ $(document).ready(function(){
     });
 
     /* Cuando se ponga en checked la tarea */
-    $("#padre-lista input").click(function(e){ // Selecciona todas las tareas y detecta cuando se le hace click (pone chulito)
+    $("#padre-lista input").bind("click", function(e){ // Selecciona todas las tareas y detecta cuando se le hace click (pone chulito)
+        console.log("Clicking the checkbox");
         e.preventDefault();
-        marcarTareaCompletada(this);
+        marcarTareaCompletada($(this));
     });
 
     /* Eliminar por medio de la X las tareas del To Do Items */
@@ -65,6 +66,7 @@ $(document).ready(function(){
     }
 
     function marcarTareaCompletada(checkbox) {
+        console.log(checkbox);
         var tarea = $(checkbox).parent("li").find("label").text(); // Trae el id especifico de cada li de tarea.
         var index = tareas.indexOf(tarea);
 
