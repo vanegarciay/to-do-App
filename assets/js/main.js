@@ -1,50 +1,87 @@
 $(document).ready(function(){
     var tareas = new Array();
     
-    if (localStorage.length > 0) {
-        tareas = JSON.parse(localStorage.getItem("tareas"));
-        tareas.forEach(function(tarea, index) {
-            $("#padre-lista").append('<li><input type="checkbox" class="filled-in" id="'+index+'"><label for="'+index+'">' +tarea+'</label><button>X</button></li>');
-        });
-    }
+    cargarTareasExistentes();
 
-    /*Guarda en local Storage las tareas dentro de un array, verifica q el campo no este vacio y crea la lista de tareas, limpiando el boton cada vez q se envia la tarea*/
+    /* Cuando hace click en el botòn enviar */
     $("button#enviar").click(function(e){
         e.preventDefault();
-        var tarea = $("#tarea").val();
-        tareas.push(tarea);
-        localStorage.setItem("tareas", JSON.stringify(tareas));
+        var nueva_tarea = $("#tarea").val();
 
-        if(tarea =="") {
-            alert("Debes ingresar una tarea");
+        if(esValidaLaNuevaTarea(nueva_tarea)) {
+            guardarNuevaTarea(nueva_tarea);
+            mostrarNuevaTareaEnListado(nueva_tarea);
+            limpiarInput();
         } else {
-            var id_nueva_tarea = $("input[type=checkbox]").length;
-            $("#padre-lista").append('<li><input type="checkbox" class="filled-in" id="'+id_nueva_tarea+'"><label for="'+id_nueva_tarea+'">' +tarea+'</label><button>X</button></li>');
-            $("#tarea").val("");
+            mostrarErrorEnNuevaTarea();
         }
     });
 
-    /* Funcion para eliminar cuando se ponga en checked la tarea */
+    /* Cuando se ponga en checked la tarea */
     $("#padre-lista input").click(function(e){ // Selecciona todas las tareas y detecta cuando se le hace click (pone chulito)
         e.preventDefault();
-        var id_tarea = $(this)[0].id; // Trae el id especifico de cada li de tarea.
-        $("#padre-completed").append('<li><input type="checkbox" checked disabled class="filled-in" id="'+id_tarea+'"><label for="'+id_tarea+'">' +tareas[id_tarea]+'</label><button>X</button></li>');
-
-        tareas.splice(id_tarea, 1);
-        localStorage.setItem("tareas", JSON.stringify(tareas));
-
-        $(this).parent("li").remove(); //Selecciona la tarea en especifica a la que se le hace check y la remueve.
-
-
+        marcarTareaCompletada(this);
     });
 
-    /* Funcion para eliminar por medio de la X las tareas del To Do Items */
+    /* Eliminar por medio de la X las tareas del To Do Items */
     $("#padre-lista button").click(function(e){ // Selecciona todas las tareas y detecta cuando se le hace click (pone chulito)
         e.preventDefault();
-        var id_tarea = $(this).parent("li").find("input")[0].id; // va al li padre del boton X y trae el id del input dentro de ese li.
-        tareas.splice(id_tarea, 1); // Elimina todo el li de tarea del array en localStorage.
+        eliminarTarea(this);
+    });
+
+    function cargarTareasExistentes() {
+        if (localStorage.length > 0) {
+            tareas = JSON.parse(localStorage.getItem("tareas"));
+            tareas.forEach(function(tarea, index) {
+                $("#padre-lista").append('<li><input type="checkbox" class="filled-in" id="'+index+'"><label for="'+index+'">' +tarea+'</label><button>X</button></li>');
+            });
+        }
+    }
+
+    function esValidaLaNuevaTarea(nueva_tarea) {
+        if(nueva_tarea == "") {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function mostrarErrorEnNuevaTarea() {
+        alert("Debes ingresar una tarea");
+    }
+
+    function guardarNuevaTarea(nueva_tarea) {
+        tareas.push(nueva_tarea);
+        localStorage.setItem("tareas", JSON.stringify(tareas));
+    }
+
+    function mostrarNuevaTareaEnListado(nueva_tarea) {
+        var id_nueva_tarea = tareas.length;
+        $("#padre-lista").append('<li><input type="checkbox" class="filled-in" id="'+id_nueva_tarea+'"><label for="'+id_nueva_tarea+'">' +nueva_tarea+'</label><button>X</button></li>');
+    }
+
+    function limpiarInput() {
+        $("#tarea").val("");
+    }
+
+    function marcarTareaCompletada(checkbox) {
+        var tarea = $(checkbox).parent("li").find("label").text(); // Trae el id especifico de cada li de tarea.
+        var index = tareas.indexOf(tarea);
+
+        $("#padre-completed").append('<li><input type="checkbox" checked disabled class="filled-in" id="'+index+'"><label for="'+index+'">' +tarea+'</label><button>X</button></li>');
+        tareas.splice(index, 1);
         localStorage.setItem("tareas", JSON.stringify(tareas));
 
-        $(this).parent("li").remove(); //Selecciona la tarea en especifica a la que se le hace check y la remueve.
-    });
+        $(checkbox).parent("li").remove(); //Selecciona la tarea en especifica a la que se le hace check y la remueve.
+    }
+
+    function eliminarTarea(checkbox) {
+        var tarea = $(checkbox).parent("li").find("label").text(); // Trae el id especifico de cada li de tarea.
+        var index = tareas.indexOf(tarea);
+
+        tareas.splice(index, 1);
+        localStorage.setItem("tareas", JSON.stringify(tareas));
+
+        $(checkbox).parent("li").remove(); //Selecciona la tarea en especifica a la que se le hace check y la remueve.
+    }
 });
