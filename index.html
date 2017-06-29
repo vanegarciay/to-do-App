@@ -15,7 +15,7 @@
 <body>
     <header class="container">
         <div class="row">
-            <div class="col-s12 offset-l4 col-l4">
+            <div class="col s12 offset-l4 col l4">
                 <h1>To Do App</h1>
             </div>
         </div>
@@ -23,21 +23,19 @@
     <section>
         <div class="container">
             <div class="row">
-                <div class="col-s12 offset-l2 col-l8">
+                <div class="col s12 offset-l2 col l8">
                         <input type="text" name="tarea" placeholder="New Task" id="tarea">
                         <button id="enviar"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
             </div>
             <div class="row">
-                <div class="col-s12 col-l12">
+                <div class="col s6 col m6">
                     <h2>To Do Items</h2>
+                    <ul id="padre-lista"></ul>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-s12 col-l12">
-                    <ul id="padre-lista">
-                        
-                    </ul>
+                <div class="col s6 col m6">
+                    <h2>Completed Items</h2>
+                    <ul id="padre-completed"></ul>
                 </div>
             </div>
         </div>
